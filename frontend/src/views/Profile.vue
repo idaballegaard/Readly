@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { clearAuthState, getStoredUser } from '../modules/useAuth'
 import { useFavorites } from '../modules/useFavorites'
 import ReadingGoalsSection from '../components/ReadingGoalsSection.vue'
+import BookCard from '../components/BookCard.vue'
 
 const router = useRouter()
 const user = ref<any>(null)
@@ -69,31 +70,13 @@ const logout = () => {
         v-else
         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6"
       >
-        <div
+        <BookCard
           v-for="book in favoriteBooks"
           :key="book._id"
-          @click="goToBook(book._id)"
-          class="cursor-pointer group"
-        >
-          <div class="bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition">
-
-            <img
-              :src="book.imageUrl"
-              class="w-full h-64 object-cover group-hover:scale-105 transition"
-            />
-
-            <div class="p-3">
-              <h3 class="text-sm font-semibold">
-                {{ book.title }}
-              </h3>
-
-              <p class="text-xs text-gray-400">
-                {{ book.author }}
-              </p>
-            </div>
-
-          </div>
-        </div>
+          :book="book"
+          :showFavorite="false"
+          @select="goToBook(book._id)"
+        />
       </div>
 
     </div>
