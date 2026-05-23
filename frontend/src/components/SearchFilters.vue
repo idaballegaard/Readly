@@ -15,28 +15,28 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="bg-gray-800 p-6 rounded-lg mb-8">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+  <div class="search-filters">
+    <div class="search-filters-grid">
       <div>
-        <label class="block text-sm font-semibold text-gray-300 mb-2">
+        <label class="filter-label">
           Search by Title
         </label>
         <input
           :value="searchTitle"
           type="text"
           placeholder="Book title..."
-          class="w-full p-2 rounded bg-gray-700 text-white outline-none focus:ring-2 focus:ring-purple-500"
+          class="filter-control"
           @input="emit('update:searchTitle', ($event.target as HTMLInputElement).value)"
         />
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-gray-300 mb-2">
+        <label class="filter-label">
           Filter by Genre
         </label>
         <select
           :value="searchGenre"
-          class="w-full p-2 rounded bg-gray-700 text-white outline-none focus:ring-2 focus:ring-purple-500"
+          class="filter-control"
           @change="emit('update:searchGenre', ($event.target as HTMLSelectElement).value)"
         >
           <option value="">All Genres</option>
@@ -51,12 +51,12 @@ const emit = defineEmits<{
       </div>
 
       <div>
-        <label class="block text-sm font-semibold text-gray-300 mb-2">
+        <label class="filter-label">
           Sort by
         </label>
         <select
           :value="sortBy"
-          class="w-full p-2 rounded bg-gray-700 text-white outline-none focus:ring-2 focus:ring-purple-500"
+          class="filter-control"
           @change="emit('update:sortBy', ($event.target as HTMLSelectElement).value)"
         >
           <option value="rating">Highest Rating</option>
@@ -64,11 +64,71 @@ const emit = defineEmits<{
         </select>
       </div>
 
-      <div class="flex items-end">
-        <div class="text-sm text-gray-400">
+      <div class="result-wrap">
+        <div class="result-text">
           {{ resultCount }} book{{ resultCount !== 1 ? 's' : '' }} found
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.search-filters {
+  border: 1px solid rgba(120, 135, 190, 0.24);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(8, 18, 40, 0.78), rgba(9, 12, 30, 0.84));
+  box-shadow: 0 18px 48px rgba(5, 8, 22, 0.45);
+  padding: 1.25rem;
+}
+
+.search-filters-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.filter-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #cdd8ff;
+}
+
+.filter-control {
+  width: 100%;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(118, 128, 172, 0.34);
+  background: rgba(12, 21, 43, 0.88);
+  color: #eef2ff;
+  padding: 0.55rem 0.7rem;
+  outline: none;
+}
+
+.filter-control:focus {
+  border-color: rgba(166, 122, 255, 0.85);
+  box-shadow: 0 0 0 2px rgba(130, 85, 240, 0.28);
+}
+
+.filter-control option {
+  background: #10182f;
+  color: #f2f5ff;
+}
+
+.result-wrap {
+  display: flex;
+  align-items: flex-end;
+}
+
+.result-text {
+  font-size: 0.875rem;
+  color: #a6b0cf;
+}
+
+@media (min-width: 768px) {
+  .search-filters-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+</style>

@@ -122,7 +122,7 @@ const groupedBooks = computed(() => {
         </p>
       </section>
 
-      <section class="filters-panel mb-8">
+      <section class="mb-8">
         <SearchFilters
           :searchTitle="searchTitle"
           :searchGenre="searchGenre"
@@ -288,14 +288,6 @@ const groupedBooks = computed(() => {
   background: #2563eb;
 }
 
-.filters-panel {
-  border: 1px solid rgba(120, 135, 190, 0.24);
-  border-radius: 1rem;
-  background: linear-gradient(145deg, rgba(8, 18, 40, 0.78), rgba(9, 12, 30, 0.84));
-  box-shadow: 0 18px 48px rgba(5, 8, 22, 0.45);
-  padding: 0.25rem;
-}
-
 .section-header {
   display: flex;
   align-items: flex-start;
@@ -359,33 +351,6 @@ const groupedBooks = computed(() => {
   border-color: rgba(166, 122, 255, 0.82);
   color: #ffffff;
   background: linear-gradient(145deg, rgba(105, 58, 204, 0.75), rgba(92, 56, 175, 0.7));
-}
-
-:deep(.filters-panel > div) {
-  background: transparent;
-}
-
-:deep(.filters-panel label) {
-  color: #cdd8ff;
-}
-
-:deep(.filters-panel input),
-:deep(.filters-panel select) {
-  background: rgba(12, 21, 43, 0.88);
-  border: 1px solid rgba(118, 128, 172, 0.34);
-  color: #eef2ff;
-}
-
-:deep(.filters-panel input:focus),
-:deep(.filters-panel select:focus) {
-  outline: none;
-  border-color: rgba(166, 122, 255, 0.85);
-  box-shadow: 0 0 0 2px rgba(130, 85, 240, 0.28);
-}
-
-:deep(.filters-panel option) {
-  background: #10182f;
-  color: #f2f5ff;
 }
 
 @media (max-width: 768px) {
