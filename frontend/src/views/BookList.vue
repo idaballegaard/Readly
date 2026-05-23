@@ -107,138 +107,77 @@ const groupedBooks = computed(() => {
 </script>
 
 <template>
-  <div class="p-8 max-w-6xl mx-auto">
-    
-    <!-- Title -->
-    <h1 class="text-3xl font-bold mb-8 text-purple-400">
-      Explore Books
-    </h1>
+  <div class="books-shell">
+    <div class="books-glow books-glow-left"></div>
+    <div class="books-glow books-glow-right"></div>
 
-    <SearchFilters
-      :searchTitle="searchTitle"
-      :searchGenre="searchGenre"
-      :sortBy="sortBy"
-      :availableGenres="availableGenres"
-      :resultCount="filteredAndSortedBooks.length"
-      @update:searchTitle="searchTitle = $event"
-      @update:searchGenre="searchGenre = $event"
-      @update:sortBy="sortBy = $event"
-    />
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+      <section class="rounded-2xl border border-indigo-400/20 bg-gradient-to-r from-slate-950/85 via-slate-900/80 to-indigo-950/75 p-6 sm:p-8 mb-8">
+        <h1 class="text-4xl sm:text-5xl font-black text-white leading-tight">
+          Explore
+          <span class="text-purple-400">Books</span>
+        </h1>
+        <p class="text-gray-300 mt-3 max-w-2xl">
+          Search, filter, and discover books across genres. Build your own reading list with favorites.
+        </p>
+      </section>
 
-    <!-- Loading -->
-    <div v-if="loading || favoritesLoading" class="text-center text-gray-400">
-      Loading...
-    </div>
+      <section class="filters-panel mb-8">
+        <SearchFilters
+          :searchTitle="searchTitle"
+          :searchGenre="searchGenre"
+          :sortBy="sortBy"
+          :availableGenres="availableGenres"
+          :resultCount="filteredAndSortedBooks.length"
+          @update:searchTitle="searchTitle = $event"
+          @update:searchGenre="searchGenre = $event"
+          @update:sortBy="sortBy = $event"
+        />
+      </section>
 
-    <!-- Error -->
-    <div v-else-if="error" class="text-center text-red-500">
-      {{ error }}
-    </div>
-
-    <div v-else-if="favoritesError" class="text-center text-red-500">
-      {{ favoritesError }}
-    </div>
-
-    <!-- Content -->
-    <div v-else>
-
-      <!-- TOP SECTION -->
-      <div class="mb-12">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-semibold text-white">
-            {{ hasActiveFilters ? 'Search Results' : 'Highest Rated' }}
-          </h2>
-          <router-link
-            v-if="!hasActiveFilters"
-            to="/books/highest-rated"
-            class="text-purple-400 hover:text-purple-300 text-sm"
-          >
-            View all
-          </router-link>
-        </div>
-
-        <div
-          v-if="topSectionBooks.length === 0"
-          class="rounded-xl border border-gray-800 bg-gray-900/60 p-6 text-gray-400"
-        >
-          No books found for your current filters.
-        </div>
-
-        <div
-          v-else
-          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6"
-        >
-          <BookCard
-            v-for="book in topSectionBooks"
-            :key="book._id"
-            :book="book"
-            :showFavorite="true"
-            :favoriteActive="isFavorite(book._id)"
-            :favoriteDisabled="favoritePendingIds.includes(book._id) || favoritesLoading"
-            @select="goToBook(book._id)"
-            @toggleFavorite="handleFavorite(book._id)"
-          />
-        </div>
+      <div v-if="loading || favoritesLoading" class="surface-message text-gray-300">
+        Loading...
       </div>
 
-      <!-- BROWSE BY GENRE SECTION -->
-      <div class="mb-12">
-        <h2 class="text-xl font-semibold text-white mb-6">
-          Browse by Genre
-        </h2>
-
-        <div class="flex flex-wrap gap-3 mb-8">
-          <button
-            @click="browseGenre = ''"
-            :class="[
-              'px-4 py-2 rounded-lg font-semibold transition',
-              browseGenre === ''
-                ? 'bg-purple-500 text-white'
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            ]"
-          >
-            All Genres
-          </button>
-
-          <button
-            v-for="genre in availableGenres"
-            :key="genre"
-            @click="browseGenre = genre"
-            :class="[
-              'px-4 py-2 rounded-lg font-semibold transition',
-              browseGenre === genre
-                ? 'bg-purple-500 text-white'
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            ]"
-          >
-            {{ genre }}
-          </button>
-        </div>
+      <div v-else-if="error" class="surface-message text-red-300">
+        {{ error }}
       </div>
 
-      <!-- BOOKS BY SELECTED GENRE -->
-      <div>
-        <div
-          v-for="(genreBooks, genre) in groupedBooks"
-          :key="genre"
-          class="mb-12"
-        >
-          
-          <!-- Genre title -->
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-purple-400">
-              {{ genre }}
-            </h2>
-            <router-link :to="`/genre/${genre}`" class="text-purple-400 hover:text-purple-300 text-sm">
+      <div v-else-if="favoritesError" class="surface-message text-red-300">
+        {{ favoritesError }}
+      </div>
+
+      <div v-else>
+        <section class="mb-12">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">{{ hasActiveFilters ? 'Search Results' : 'Highest Rated' }}</h2>
+              <p class="section-tagline">
+                {{ hasActiveFilters ? 'Books matched to your active filters.' : 'Community favorites with the strongest ratings right now.' }}
+              </p>
+            </div>
+            <router-link
+              v-if="!hasActiveFilters"
+              to="/books/highest-rated"
+              class="section-link"
+            >
               View all
             </router-link>
           </div>
 
-          <!-- GRID -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          <div
+            v-if="topSectionBooks.length === 0"
+            class="surface-message text-gray-300"
+          >
+            No books found for your current filters.
+          </div>
 
+          <div
+            v-else
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5"
+          >
             <BookCard
-              v-for="book in genreBooks"
+              v-for="book in topSectionBooks"
               :key="book._id"
               :book="book"
               :showFavorite="true"
@@ -247,16 +186,215 @@ const groupedBooks = computed(() => {
               @select="goToBook(book._id)"
               @toggleFavorite="handleFavorite(book._id)"
             />
+          </div>
+        </section>
 
+        <section class="mb-10">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Browse by Genre</h2>
+              <p class="section-tagline">Switch genre to quickly focus your browsing experience.</p>
+            </div>
           </div>
 
-        </div>
+          <div class="flex flex-wrap gap-3">
+            <button
+              @click="browseGenre = ''"
+              :class="[
+                'genre-chip',
+                browseGenre === '' ? 'genre-chip-active' : ''
+              ]"
+            >
+              All Genres
+            </button>
+
+            <button
+              v-for="genre in availableGenres"
+              :key="genre"
+              @click="browseGenre = genre"
+              :class="[
+                'genre-chip',
+                browseGenre === genre ? 'genre-chip-active' : ''
+              ]"
+            >
+              {{ genre }}
+            </button>
+          </div>
+        </section>
+
+        <section>
+          <div
+            v-for="(genreBooks, genre) in groupedBooks"
+            :key="genre"
+            class="mb-12"
+          >
+            <div class="section-header">
+              <div>
+                <h2 class="section-title genre-title">{{ genre }}</h2>
+                <p class="section-tagline">Handpicked titles in this genre.</p>
+              </div>
+              <router-link :to="`/genre/${genre}`" class="section-link">
+                View all
+              </router-link>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5">
+              <BookCard
+                v-for="book in genreBooks"
+                :key="book._id"
+                :book="book"
+                :showFavorite="true"
+                :favoriteActive="isFavorite(book._id)"
+                :favoriteDisabled="favoritePendingIds.includes(book._id) || favoritesLoading"
+                @select="goToBook(book._id)"
+                @toggleFavorite="handleFavorite(book._id)"
+              />
+            </div>
+          </div>
+        </section>
       </div>
-
     </div>
-
   </div>
 </template>
 
 <style scoped>
+.books-shell {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 12% 14%, rgba(70, 32, 130, 0.34), transparent 32%),
+              radial-gradient(circle at 89% 0%, rgba(24, 69, 148, 0.24), transparent 36%),
+              linear-gradient(135deg, #020611 0%, #050e1f 38%, #020712 100%);
+}
+
+.books-glow {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  opacity: 0.18;
+}
+
+.books-glow-left {
+  top: -140px;
+  left: -150px;
+  background: #7f5af0;
+}
+
+.books-glow-right {
+  top: 110px;
+  right: -190px;
+  background: #2563eb;
+}
+
+.filters-panel {
+  border: 1px solid rgba(120, 135, 190, 0.24);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(8, 18, 40, 0.78), rgba(9, 12, 30, 0.84));
+  box-shadow: 0 18px 48px rgba(5, 8, 22, 0.45);
+  padding: 0.25rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.7rem;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #f5f7ff;
+}
+
+.genre-title {
+  color: #c4a2ff;
+}
+
+.section-tagline {
+  margin-top: 0.22rem;
+  color: #a6b0cf;
+}
+
+.section-link {
+  margin-top: 0.45rem;
+  color: #ab86ff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  transition: color 160ms ease;
+}
+
+.section-link:hover {
+  color: #c7b0ff;
+}
+
+.surface-message {
+  border: 1px solid rgba(65, 74, 110, 0.55);
+  border-radius: 0.9rem;
+  background: rgba(10, 16, 35, 0.74);
+  padding: 1rem 1.1rem;
+}
+
+.genre-chip {
+  border: 1px solid rgba(120, 135, 190, 0.38);
+  border-radius: 9999px;
+  padding: 0.5rem 0.95rem;
+  color: #cfd8f7;
+  font-weight: 700;
+  background: rgba(13, 20, 42, 0.76);
+  transition: border-color 160ms ease, color 160ms ease, transform 160ms ease, background-color 160ms ease;
+}
+
+.genre-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(173, 139, 255, 0.62);
+  color: #f2ebff;
+}
+
+.genre-chip-active {
+  border-color: rgba(166, 122, 255, 0.82);
+  color: #ffffff;
+  background: linear-gradient(145deg, rgba(105, 58, 204, 0.75), rgba(92, 56, 175, 0.7));
+}
+
+:deep(.filters-panel > div) {
+  background: transparent;
+}
+
+:deep(.filters-panel label) {
+  color: #cdd8ff;
+}
+
+:deep(.filters-panel input),
+:deep(.filters-panel select) {
+  background: rgba(12, 21, 43, 0.88);
+  border: 1px solid rgba(118, 128, 172, 0.34);
+  color: #eef2ff;
+}
+
+:deep(.filters-panel input:focus),
+:deep(.filters-panel select:focus) {
+  outline: none;
+  border-color: rgba(166, 122, 255, 0.85);
+  box-shadow: 0 0 0 2px rgba(130, 85, 240, 0.28);
+}
+
+:deep(.filters-panel option) {
+  background: #10182f;
+  color: #f2f5ff;
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.35rem;
+  }
+
+  .section-tagline {
+    font-size: 0.9rem;
+  }
+}
 </style>
