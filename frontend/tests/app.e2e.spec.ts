@@ -75,7 +75,10 @@ async function createBook(
   expect(response.status()).toBe(201);
 
   const json = await response.json();
-  return String(json._id);
+  const createdBookId = String(json._id ?? json.id ?? "");
+
+  expect(createdBookId).toBeTruthy();
+  return createdBookId;
 }
 
 async function loginThroughUi(page: Page, email: string, password: string) {
