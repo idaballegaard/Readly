@@ -5,6 +5,10 @@ import { test } from "@playwright/test";
 // Test case imports
 import health from "./health.test";
 import userTestCollection from "./user.test";
+import authTestCollection from "./auth.test";
+import booksTestCollection from "./books.test";
+import favoritesTestCollection from "./favorites.test";
+import queryTestCollection from "./query.test";
 
 // Model imports for database cleanup
 import { userModel } from "../src/models/userModel";
@@ -42,3 +46,7 @@ setup();
 
 test.describe(health);
 test.describe(userTestCollection);
+test.describe(authTestCollection);
+test.describe(booksTestCollection);
+test.describe(favoritesTestCollection);
+test.describe(queryTestCollection);

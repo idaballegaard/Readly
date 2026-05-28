@@ -4,10 +4,12 @@ export default function userTestCollection() {
   test("Valid user registration info", async ({ request }) => {
     test.setTimeout(10_000);
 
+    const uniqueEmail = `idaballegaard+${Date.now()}@msn.com`;
+
     // Arrange
     const user = {
       name: "Ida Ballegaard",
-      email: "idaballegaard@msn.com",
+      email: uniqueEmail,
       password: "12345678",
     };
 
@@ -23,10 +25,12 @@ export default function userTestCollection() {
   test("Invalid user registration info", async ({ request }) => {
     test.setTimeout(10_000);
 
+    const uniqueEmail = `idaballegaard+${Date.now()}@msn.com`;
+
     // Arrange
     const user = {
       name: "Ida Ballegaard",
-      email: "idaballegaard@msn.com",
+      email: uniqueEmail,
       password: "1234", // invalid password according to Joi
     };
 

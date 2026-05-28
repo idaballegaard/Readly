@@ -18,7 +18,7 @@
     "build": "rm -rf ./dist && tsc",
     "start-dev": "cross-env NODE_ENV=development npx nodemon",
     "seed": "cross-env NODE_ENV=development npx ts-node ./src/util/dataSeeder.ts",
-    "testdb": "cross-env NODE_ENV=tetst npx ts-node ./src/index.ts",
+    "testdb": "cross-env NODE_ENV=test npx ts-node ./src/index.ts",
     "test": "npx playwright test --reporter=list"
   },
   "nodemonConfig": {
