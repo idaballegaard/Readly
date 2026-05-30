@@ -160,7 +160,7 @@ jobs:
         run: npm run test:e2e
         env:
           DBHOST: ${{ secrets.DBHOST }}
-          BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          BASE_URL: ${{ vars.API_BASE_URL }}
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
         working-directory: frontend
 
