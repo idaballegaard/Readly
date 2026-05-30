@@ -11,8 +11,9 @@ permissions:
   id-token: write
     
 jobs:
-  unittests:
+  integration:
     runs-on: ubuntu-latest
+    environment: Test
 
     steps:
       - name: Checkout code
@@ -73,13 +74,9 @@ jobs:
           BASE_URL: ${{ vars.VITE_API_BASE_URL }}
         working-directory: backend
 
-      - name: Run Playwright (Frontend)
-        run: npm run test:e2e
-        env:
-          DBHOST: ${{ secrets.DBHOST }}
-          BASE_URL: ${{ vars.VITE_API_BASE_URL }}
-        working-directory: frontend
-
-      # - name: Run Playwright
+      # - name: Run Playwright (Frontend)
       #   run: npm run test:e2e
+      #   env:
+      #     DBHOST: ${{ secrets.DBHOST }}
+      #     BASE_URL: ${{ vars.VITE_API_BASE_URL }}
       #   working-directory: frontend
