@@ -76,6 +76,10 @@ jobs:
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
         working-directory: backend
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: frontend
+
       - name: Run Playwright (Frontend)
         run: npm run test:e2e
         env:
