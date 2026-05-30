@@ -135,7 +135,7 @@ jobs:
   frontend-deploy:
     runs-on: ubuntu-latest
     environment: Production
-    needs: [e]
+    needs: [ui-test]
     steps:
       - name: Deliver to GitHub Pages
         uses: actions/deploy-pages@v4
@@ -145,6 +145,7 @@ jobs:
   backend-deploy:
     runs-on: ubuntu-latest
     environment: Production
+    needs: [ui-test]
     steps:
       - name: Deliver to Render
         uses: johnbeynon/render-deploy-action@v0.0.8
