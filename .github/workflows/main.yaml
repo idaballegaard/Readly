@@ -129,6 +129,37 @@ jobs:
             frontend/test-results
           if-no-files-found: ignore
 
+  unit-tests:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: backend
+
+      - name: Run backend unit tests
+        run: npm run test:unit
+        working-directory: backend
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Run frontend unit tests
+        run: npm run test:unit
+        working-directory: frontend
+
   deploy-frontend:
     needs: [frontend-build, backend-playwright, frontend-playwright]
     runs-on: ubuntu-latest
