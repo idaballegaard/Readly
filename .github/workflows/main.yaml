@@ -104,7 +104,7 @@ jobs:
           api-key: ${{ secrets.RENDER_API_KEY }}
           wait-for-success: true
 
-  e2e-and-UI-test:
+  e2e-test:
     runs-on: ubuntu-latest
     needs: [ frontend-delivery, backend-delivery ]
     steps:
@@ -116,6 +116,10 @@ jobs:
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
         working-directory: backend
 
+  ui-test:
+    runs-on: ubuntu-latest
+    needs: [e2e-test]
+    steps:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
         working-directory: frontend
@@ -131,6 +135,7 @@ jobs:
   frontend-deploy:
     runs-on: ubuntu-latest
     environment: Production
+    needs: [e]
     steps:
       - name: Deliver to GitHub Pages
         uses: actions/deploy-pages@v4
