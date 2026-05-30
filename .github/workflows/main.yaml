@@ -2,7 +2,7 @@ name: Readly CI/CD
 
 on:
   push:
-    branches: [main, cleanup]
+    branches: [main, cleanup, more-test]
   workflow_dispatch:
 
 permissions:
