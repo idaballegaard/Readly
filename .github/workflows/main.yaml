@@ -11,11 +11,14 @@ permissions:
   id-token: write
     
 jobs:
-  ci-frontend:
+  ci:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        working-directory: ['frontend', 'backend']
     defaults:
       run:
-        working-directory: frontend
+        working-directory: ${{ matrix.working-directory }}
 
     steps:
       - name: Checkout code
@@ -40,6 +43,11 @@ jobs:
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
           VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
 
+  ci-backend:
+    runs-on: ubuntu
+    defaults:
+      run:
+        working-directory: frontend
 
   frontend-build:
     if: false
