@@ -72,6 +72,7 @@ jobs:
         env:
           DBHOST: ${{ secrets.DBHOST }}
           BASE_URL: ${{ vars.API_BASE_URL }}
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
         working-directory: backend
 
       # - name: Run Playwright (Frontend)
