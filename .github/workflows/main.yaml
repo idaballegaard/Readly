@@ -71,7 +71,7 @@ jobs:
         run: npm run test
         env:
           DBHOST: ${{ secrets.DBHOST }}
-          BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          BASE_URL: ${{ vars.API_BASE_URL }}
         working-directory: backend
 
       # - name: Run Playwright (Frontend)
