@@ -11,10 +11,30 @@ permissions:
   id-token: write
     
 jobs:
-  integration:
+  frontend-integration:
     runs-on: ubuntu-latest
-    environment: Test
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Run unit tests
+        run: npm run test:unit
+        working-directory: frontend
+
+  backend-integration:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,9 +50,16 @@ jobs:
         run: npm install
         working-directory: backend
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: frontend
+      - name: Run unit tests
+        run: npm run test:unit
+        working-directory: backend
+
+  complete:
+    if: false
+    runs-on: ubuntu-latest
+    environment: Test
+
+    steps:
 
       - name: Build frontend (for test)
         run: npm run build
@@ -48,13 +75,7 @@ jobs:
           VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
         working-directory: frontend
 
-      - name: Run unit tests
-        run: npm run test:unit
-        working-directory: backend
 
-      - name: Run unit tests
-        run: npm run test:unit
-        working-directory: frontend
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
