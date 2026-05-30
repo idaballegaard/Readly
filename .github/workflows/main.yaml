@@ -33,6 +33,20 @@ jobs:
         run: npm run test:unit
         working-directory: frontend
 
+      - name: Build frontend (for test)
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ vars.API_BASE_URL }}
+          VITE_APP_BASE_PATH: /${{ github.event.repository.name }}-TEST/
+        working-directory: frontend
+
+      - name: Build frontend (for prod)
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ vars.API_BASE_URL }}
+          VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
+        working-directory: frontend
+
   backend-integration:
     runs-on: ubuntu-latest
     steps:
@@ -60,23 +74,6 @@ jobs:
     environment: Test
 
     steps:
-
-      - name: Build frontend (for test)
-        run: npm run build
-        env:
-          VITE_API_BASE_URL: ${{ vars.API_BASE_URL }}
-          VITE_APP_BASE_PATH: /${{ github.event.repository.name }}-TEST/
-        working-directory: frontend
-
-      - name: Build frontend (for prod)
-        run: npm run build
-        env:
-          VITE_API_BASE_URL: ${{ vars.API_BASE_URL }}
-          VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
-        working-directory: frontend
-
-
-
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
