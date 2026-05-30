@@ -166,7 +166,7 @@ jobs:
   backend-deploy:
     runs-on: ubuntu-latest
     environment: Production
-    needs: [e2e-test]
+    needs: [e2e-test, frontend-integration]
     steps:
       - name: Download frontend artifact
         uses: actions/download-artifact@v5
