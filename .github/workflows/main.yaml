@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        
+
       - name: Run unit tests
         run: npm run test:unit
 
@@ -42,6 +42,9 @@ jobs:
         env:
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
           VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
+
+      - name: Start services
+        run: npm run dev
 
       - uses: actions/upload-artifact@v4
         with:
