@@ -17,6 +17,7 @@ export const test = base.extend<{ workerTag: string }>({
 });
 
 export const API_BASE_URL = process.env.BASE_URL ?? "http://localhost:4000/api";
+console.log(`Using API_BASE_URL: ${API_BASE_URL}`);
 
 export interface AuthState {
   token: string;
