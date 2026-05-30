@@ -29,12 +29,16 @@ jobs:
         run: npm install
         working-directory: backend
 
+      - name: Install dependencies
+        run: npm install
+        working-directory: frontend
+
       - name: Run unit tests
         run: npm run test:unit
         working-directory: backend
 
-      - name: Install dependencies
-        run: npm install
+      - name: Run unit tests
+        run: npm run test:unit
         working-directory: frontend
 
       - name: Build frontend
@@ -42,10 +46,6 @@ jobs:
         env:
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
           VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
-        working-directory: frontend
-
-      - name: Run unit tests
-        run: npm run test:unit
         working-directory: frontend
 
       - name: Configure GitHub Pages
@@ -56,11 +56,11 @@ jobs:
         with:
           path: frontend/dist
 
-      - name: Deploy to GitHub Pages
+      - name: Deliver to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Deploy to production (backend)
+      - name: Deliver to Render
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
           service-id: ${{ secrets.RENDER_SERVICE_ID }}
@@ -73,202 +73,13 @@ jobs:
           BASE_URL: ${{ vars.VITE_API_BASE_URL }}
         working-directory: backend
 
-      # - name: Run Playwright
-      #   run: npm run test:e2e
-      #   working-directory: frontend
-
-
-
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: project-${{ matrix.working-directory }}
-      #     path: .
-    
-
-  frontend-build:
-    if: false
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Install dependencies
-        run: npm install
-        working-directory: frontend
-
-      - name: Build frontend
-        run: npm run build
-        working-directory: frontend
-        env:
-          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
-          VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
-
-      - name: Add GitHub Pages SPA fallback
-        run: cp dist/index.html dist/404.html
-        working-directory: frontend
-
-      - name: Upload frontend artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist
-          path: frontend/dist
-          if-no-files-found: error
-
-  backend-playwright:
-    if: false
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: backend/package-lock.json
-
-      - name: Install dependencies
-        run: npm install
-        working-directory: backend
-
-      - name: Run backend Playwright tests
-        run: npm test
-        env:
-          DBHOST: ${{ secrets.DBHOST }}
-          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-        working-directory: backend
-
-      - name: Upload backend Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-playwright-report
-          path: |
-            backend/playwright-report
-            backend/test-results
-          if-no-files-found: ignore
-
-  frontend-playwright:
-    if: false
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: backend/package-lock.json
-
-      - name: Install backend dependencies
-        run: npm install
-        working-directory: backend
-
-      - name: Install frontend dependencies
-        run: npm install
-        working-directory: frontend
-
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
-        working-directory: frontend
-
-      - name: Run frontend Playwright tests
+      - name: Run Playwright (Frontend)
         run: npm run test:e2e
         env:
           DBHOST: ${{ secrets.DBHOST }}
-          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          BASE_URL: ${{ vars.VITE_API_BASE_URL }}
         working-directory: frontend
 
-      - name: Upload frontend Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-playwright-report
-          path: |
-            frontend/playwright-report
-            frontend/test-results
-          if-no-files-found: ignore
-
-  unit-tests:
-    if: false
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Install backend dependencies
-        run: npm install
-        working-directory: backend
-
-      - name: Run backend unit tests
-        run: npm run test:unit
-        working-directory: backend
-
-      - name: Install frontend dependencies
-        run: npm install
-        working-directory: frontend
-
-      - name: Run frontend unit tests
-        run: npm run test:unit
-        working-directory: frontend
-
-  deploy-frontend:
-    if: false
-    needs: [frontend-build, backend-playwright, frontend-playwright, unit-tests]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Download frontend artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist
-          path: frontend/dist
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: frontend/dist
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-  deploy-backend:
-    if: false
-    needs: [backend-playwright, frontend-playwright, unit-tests]
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Deploy to production (backend)
-        uses: johnbeynon/render-deploy-action@v0.0.8
-        with:
-          service-id: ${{ secrets.RENDER_SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
+      # - name: Run Playwright
+      #   run: npm run test:e2e
+      #   working-directory: frontend
