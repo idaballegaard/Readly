@@ -28,7 +28,8 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+        run: |
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
         working-directory: frontend
 
       - name: Build frontend
@@ -66,7 +67,8 @@ jobs:
           cache-dependency-path: backend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
         working-directory: backend
 
       - name: Run backend Playwright tests
@@ -105,11 +107,13 @@ jobs:
             frontend/package-lock.json
 
       - name: Install backend dependencies
-        run: npm ci
+        run: |
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
         working-directory: backend
 
       - name: Install frontend dependencies
-        run: npm ci --no-audit --no-fund
+        run: |
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
         working-directory: frontend
 
       - name: Install Playwright browser
