@@ -51,6 +51,8 @@ jobs:
 
       - name: Run Playwright
         run: npm run test
+        env:
+          DBHOST: ${{ secrets.DBHOST }}
         working-directory: backend
 
       - name: Run Playwright
