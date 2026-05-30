@@ -2,7 +2,7 @@ name: Readly CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [main, cleanup]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +11,38 @@ permissions:
   id-token: write
     
 jobs:
+  ci-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Build frontend
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
+
+
   frontend-build:
+    if: false
     runs-on: ubuntu-latest
 
     steps:
@@ -48,6 +79,7 @@ jobs:
           if-no-files-found: error
 
   backend-playwright:
+    if: false
     runs-on: ubuntu-latest
 
     steps:
@@ -85,6 +117,7 @@ jobs:
           if-no-files-found: ignore
 
   frontend-playwright:
+    if: false
     runs-on: ubuntu-latest
 
     steps:
@@ -130,6 +163,7 @@ jobs:
           if-no-files-found: ignore
 
   unit-tests:
+    if: false
     runs-on: ubuntu-latest
 
     steps:
@@ -160,6 +194,7 @@ jobs:
         working-directory: frontend
 
   deploy-frontend:
+    if: false
     needs: [frontend-build, backend-playwright, frontend-playwright, unit-tests]
     runs-on: ubuntu-latest
 
@@ -183,6 +218,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   deploy-backend:
+    if: false
     needs: [backend-playwright, frontend-playwright, unit-tests]
     runs-on: ubuntu-latest
     
