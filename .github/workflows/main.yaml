@@ -44,7 +44,7 @@ jobs:
           VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
 
       - name: Start services
-        run: npm run dev
+        run: npm run dev &
 
       - uses: actions/upload-artifact@v4
         with:
