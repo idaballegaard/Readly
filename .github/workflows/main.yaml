@@ -154,6 +154,16 @@ jobs:
         run: npm install
         working-directory: frontend
 
+      - name: Download backend artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: backend
+          path: backend
+
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: backend
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
         working-directory: frontend
