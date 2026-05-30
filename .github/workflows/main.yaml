@@ -29,6 +29,12 @@ jobs:
         run: npm install
         working-directory: backend
 
+      - name: Build frontend
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
+
       - name: Run unit tests
         run: npm run test:unit
         working-directory: backend
@@ -41,29 +47,35 @@ jobs:
         run: npm run test:unit
         working-directory: frontend
 
-      # - name: Start backend server
-      #   run: npm run start-dev &
+            - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      # - name: Run Playwright
+      #   run: npm run test
+      #   env:
+      #     DBHOST: ${{ secrets.DBHOST }}
       #   working-directory: backend
 
-      # - name: Start frontend server
-      #   run: npm run dev &
+      # - name: Run Playwright
+      #   run: npm run test:e2e
       #   working-directory: frontend
 
-      - name: Run Playwright
-        run: npm run test
-        env:
-          DBHOST: ${{ secrets.DBHOST }}
-        working-directory: backend
 
-      - name: Run Playwright
-        run: npm run test:e2e
-        working-directory: frontend
-
-      # - name: Build frontend
-      #   run: npm run build
-      #   env:
-      #     VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
-      #     VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
 
       # - uses: actions/upload-artifact@v4
       #   with:
