@@ -148,6 +148,10 @@ jobs:
           name: frontend
           path: frontend
 
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: frontend
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
         working-directory: frontend
