@@ -178,7 +178,7 @@ jobs:
   frontend-deploy:
     runs-on: ubuntu-latest
     environment: Production
-    needs: [ui-test]
+    needs: [e2e-test]
     steps:
       - name: Deliver to GitHub Pages
         uses: actions/deploy-pages@v4
@@ -188,7 +188,7 @@ jobs:
   backend-deploy:
     runs-on: ubuntu-latest
     environment: Production
-    needs: [ui-test]
+    needs: [e2e-test]
     steps:
       - name: Download frontend artifact
         uses: actions/download-artifact@v5
