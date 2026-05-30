@@ -32,7 +32,7 @@ jobs:
           set -o pipefail
           node -v
           npm -v
-          npm ci --no-audit --no-fund --verbose 2>&1 | tee npm-ci-frontend-build.log
+          npm ci --no-audit --no-fund --omit=optional --verbose 2>&1 | tee npm-ci-frontend-build.log
         working-directory: frontend
 
       - name: Upload frontend install debug logs
@@ -84,7 +84,7 @@ jobs:
           set -o pipefail
           node -v
           npm -v
-          npm ci --no-audit --no-fund --verbose 2>&1 | tee npm-ci-backend-playwright.log
+          npm ci --no-audit --no-fund --omit=optional --verbose 2>&1 | tee npm-ci-backend-playwright.log
         working-directory: backend
 
       - name: Upload backend install debug logs
@@ -137,7 +137,7 @@ jobs:
           set -o pipefail
           node -v
           npm -v
-          npm ci --no-audit --no-fund --verbose 2>&1 | tee npm-ci-backend-frontend-playwright.log
+          npm ci --no-audit --no-fund --omit=optional --verbose 2>&1 | tee npm-ci-backend-frontend-playwright.log
         working-directory: backend
 
       - name: Install frontend dependencies
@@ -145,7 +145,7 @@ jobs:
           set -o pipefail
           node -v
           npm -v
-          npm ci --no-audit --no-fund --verbose 2>&1 | tee npm-ci-frontend-playwright.log
+          npm ci --no-audit --no-fund --omit=optional --verbose 2>&1 | tee npm-ci-frontend-playwright.log
         working-directory: frontend
 
       - name: Upload frontend-playwright install debug logs
