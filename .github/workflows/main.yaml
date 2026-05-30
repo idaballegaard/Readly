@@ -41,13 +41,13 @@ jobs:
         run: npm run test:unit
         working-directory: frontend
 
-      - name: Start backend server
-        run: npm run start-dev &
-        working-directory: backend
+      # - name: Start backend server
+      #   run: npm run start-dev &
+      #   working-directory: backend
 
-      - name: Start frontend server
-        run: npm run dev &
-        working-directory: frontend
+      # - name: Start frontend server
+      #   run: npm run dev &
+      #   working-directory: frontend
 
       - name: Run Playwright
         run: npm run test
