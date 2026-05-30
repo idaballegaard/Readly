@@ -66,11 +66,11 @@ jobs:
           service-id: ${{ secrets.RENDER_SERVICE_ID }}
           api-key: ${{ secrets.RENDER_API_KEY }}
 
-      # - name: Run Playwright
-      #   run: npm run test
-      #   env:
-      #     DBHOST: ${{ secrets.DBHOST }}
-      #   working-directory: backend
+      - name: Run Playwright
+        run: npm run test
+        env:
+          DBHOST: ${{ secrets.DBHOST }}
+        working-directory: backend
 
       # - name: Run Playwright
       #   run: npm run test:e2e
