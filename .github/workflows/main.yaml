@@ -45,8 +45,30 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: project
-          path: ..
+          name: project-${{ matrix.working-directory }}
+          path: .
+    
+  e2e:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: project-backend
+          path: backend
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: project-frontend
+          path: frontend
+
+      - name: Start backend server
+        run: npm run start-dev &
+        working-directory: backend
+
+      - name: Start frontend server
+        run: npm run dev &
+        working-directory: frontend
 
   frontend-build:
     if: false
