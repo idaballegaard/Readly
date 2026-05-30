@@ -47,7 +47,7 @@ jobs:
           path: frontend/dist
           if-no-files-found: error
 
-  backend-build:
+  backend-playwright:
     runs-on: ubuntu-latest
 
     steps:
@@ -65,14 +65,68 @@ jobs:
         run: npm install
         working-directory: backend
 
-      - name: Run tests
+      - name: Run backend Playwright tests
         run: npm test
         env:
           DBHOST: ${{ secrets.DBHOST }}
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
         working-directory: backend
 
+      - name: Upload backend Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-playwright-report
+          path: |
+            backend/playwright-report
+            backend/test-results
+          if-no-files-found: ignore
+
+  frontend-playwright:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: backend
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+        working-directory: frontend
+
+      - name: Run frontend Playwright tests
+        run: npm run test:e2e
+        env:
+          DBHOST: ${{ secrets.DBHOST }}
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+        working-directory: frontend
+
+      - name: Upload frontend Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-playwright-report
+          path: |
+            frontend/playwright-report
+            frontend/test-results
+          if-no-files-found: ignore
+
   deploy-frontend:
-    needs: [frontend-build]
+    needs: [frontend-build, backend-playwright, frontend-playwright]
     runs-on: ubuntu-latest
 
     steps:
@@ -95,7 +149,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   deploy-backend:
-    needs: [backend-build]
+    needs: [backend-playwright, frontend-playwright]
     runs-on: ubuntu-latest
     
     steps:

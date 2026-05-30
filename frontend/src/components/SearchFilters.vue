@@ -22,6 +22,7 @@ const emit = defineEmits<{
           Search by Title
         </label>
         <input
+          data-testid="search-title-input"
           :value="searchTitle"
           type="text"
           placeholder="Book title..."
@@ -35,6 +36,7 @@ const emit = defineEmits<{
           Filter by Genre
         </label>
         <select
+          data-testid="search-genre-select"
           :value="searchGenre"
           class="filter-control"
           @change="emit('update:searchGenre', ($event.target as HTMLSelectElement).value)"
@@ -55,6 +57,7 @@ const emit = defineEmits<{
           Sort by
         </label>
         <select
+          data-testid="sort-by-select"
           :value="sortBy"
           class="filter-control"
           @change="emit('update:sortBy', ($event.target as HTMLSelectElement).value)"
@@ -65,7 +68,7 @@ const emit = defineEmits<{
       </div>
 
       <div class="result-wrap">
-        <div class="result-text">
+        <div class="result-text" data-testid="result-count">
           {{ resultCount }} book{{ resultCount !== 1 ? 's' : '' }} found
         </div>
       </div>

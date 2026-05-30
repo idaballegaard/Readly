@@ -1,4 +1,20 @@
-import { APIRequestContext, expect, Page } from "@playwright/test";
+import {
+  APIRequestContext,
+  expect,
+  Page,
+  test as base,
+} from "@playwright/test";
+
+export { expect };
+
+export const test = base.extend<{ workerTag: string }>({
+  workerTag: [
+    async ({}, use, workerInfo) => {
+      await use(`w${workerInfo.workerIndex}`);
+    },
+    { scope: "worker" },
+  ],
+});
 
 export const API_BASE_URL = "http://localhost:4000/api";
 
@@ -12,8 +28,17 @@ export interface AuthState {
   };
 }
 
-export function uniqueSuffix(prefix: string): string {
-  return `${prefix}-${Date.now()}-${Math.round(Math.random() * 1_000_000)}`;
+interface TestBookOverrides {
+  description?: string;
+  author?: string;
+  publishedDate?: string;
+  pages?: number;
+  rating?: number;
+  imageUrl?: string;
+}
+
+export function uniqueSuffix(prefix: string, workerTag: string): string {
+  return `${workerTag}-${prefix}-${Date.now()}-${Math.round(Math.random() * 1_000_000)}`;
 }
 
 export async function registerUser(
@@ -55,6 +80,7 @@ export async function createBook(
   token: string,
   title: string,
   genre: string,
+  overrides: TestBookOverrides = {},
 ): Promise<string> {
   const response = await request.post(`${API_BASE_URL}/books`, {
     headers: {
@@ -69,6 +95,7 @@ export async function createBook(
       genre,
       rating: 4.5,
       imageUrl: "https://example.com/e2e-book.png",
+      ...overrides,
     },
   });
 

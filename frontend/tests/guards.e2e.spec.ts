@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./helpers/e2e-helpers";
 
 test("Route guards redirect guest users to login", async ({ page }) => {
   await page.goto("/books");

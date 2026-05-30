@@ -1,15 +1,16 @@
-import { test, expect } from "@playwright/test";
 import {
   API_BASE_URL,
   AuthState,
   createBook,
+  expect,
   loginUser,
   registerUser,
+  test,
   uniqueSuffix,
 } from "./helpers/e2e-helpers";
 
-test("Profile page shows favorites for authenticated user", async ({ page, request }) => {
-  const suffix = uniqueSuffix("profile-favorites");
+test("Profile page shows favorites for authenticated user", async ({ page, request, workerTag }) => {
+  const suffix = uniqueSuffix("profile-favorites", workerTag);
   const user = await registerUser(request, suffix);
   const authState = await loginUser(request, user.email, user.password);
 

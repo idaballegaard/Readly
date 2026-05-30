@@ -29,12 +29,15 @@ const emit = defineEmits<{
 
 <template>
   <div
+    :data-testid="`book-card-${book._id}`"
     class="cursor-pointer group"
     @click="emit('select')"
   >
     <div class="relative bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition duration-300">
       <button
         v-if="showFavorite"
+        :data-testid="`favorite-toggle-${book._id}`"
+        :aria-label="favoriteActive ? `Remove ${book.title} from favorites` : `Add ${book.title} to favorites`"
         class="absolute top-2 right-2 text-xl z-10 disabled:opacity-60"
         :disabled="favoriteDisabled"
         @click.stop="emit('toggleFavorite')"
