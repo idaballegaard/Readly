@@ -43,12 +43,6 @@ jobs:
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
           VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
 
-  ci-backend:
-    runs-on: ubuntu
-    defaults:
-      run:
-        working-directory: frontend
-
   frontend-build:
     if: false
     runs-on: ubuntu-latest
