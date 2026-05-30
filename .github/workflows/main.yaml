@@ -156,7 +156,7 @@ jobs:
   frontend-deploy:
     runs-on: ubuntu-latest
     environment: Production
-    needs: [e2e-test]
+    needs: [e2e-test, frontend-integration]
     steps:
       - name: Deliver to GitHub Pages
         uses: actions/deploy-pages@v4
@@ -185,3 +185,4 @@ jobs:
         with:
           service-id: ${{ secrets.RENDER_SERVICE_ID }}
           api-key: ${{ secrets.RENDER_API_KEY }}
+          wait-for-success: true
