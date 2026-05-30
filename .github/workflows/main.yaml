@@ -32,8 +32,8 @@ jobs:
           node-version: '24'
 
       - name: Install dependencies
-        run: npm ci # Better for CI environments, ensures a clean install based on package-lock.json
-
+        run: npm install
+        
       - name: Run unit tests
         run: npm run test:unit
 
