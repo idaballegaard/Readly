@@ -168,8 +168,22 @@ jobs:
         run: npx playwright install --with-deps chromium
         working-directory: frontend
 
+      - name: Build frontend for UI tests
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ vars.API_BASE_URL }}
+          VITE_APP_BASE_PATH: /
+        working-directory: frontend
+
       - name: Run UI tests
-        run: npm run test:e2e
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173 >/dev/null && break
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:4173 >/dev/null
+          npm run test:e2e
         env:
           DBHOST: ${{ secrets.DBHOST }}
           BASE_URL: ${{ vars.API_BASE_URL }}
