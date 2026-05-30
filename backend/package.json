@@ -19,9 +19,7 @@
     "start-dev": "cross-env NODE_ENV=development npx nodemon",
     "seed": "cross-env NODE_ENV=development npx ts-node ./src/util/dataSeeder.ts",
     "testdb": "cross-env NODE_ENV=test npx ts-node ./src/index.ts",
-    "test": "npx playwright test --reporter=list",
-    "test:unit": "vitest run",
-    "test:unit:watch": "vitest"
+    "test": "npx playwright test --reporter=list"
   },
   "nodemonConfig": {
     "verbose": false,
@@ -60,7 +58,6 @@
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.7"
+    "typescript": "^5.9.3"
   }
 }
