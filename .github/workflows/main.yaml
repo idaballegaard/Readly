@@ -11,7 +11,7 @@ permissions:
   id-token: write
     
 jobs:
-  ci:
+  unittests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -32,7 +32,7 @@ jobs:
           node-version: '24'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci # Better for CI environments, ensures a clean install based on package-lock.json
 
       - name: Run unit tests
         run: npm run test:unit
@@ -42,6 +42,11 @@ jobs:
         env:
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
           VITE_APP_BASE_PATH: /${{ github.event.repository.name }}/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: project-${{ matrix.working-directory }}
+          path: .
 
   frontend-build:
     if: false
