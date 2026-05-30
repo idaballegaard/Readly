@@ -66,10 +66,11 @@ jobs:
           service-id: ${{ secrets.RENDER_SERVICE_ID }}
           api-key: ${{ secrets.RENDER_API_KEY }}
 
-      - name: Run Playwright
+      - name: Run Playwright (Backend)
         run: npm run test
         env:
           DBHOST: ${{ secrets.DBHOST }}
+          BASE_URL: ${{ vars.VITE_API_BASE_URL }}
         working-directory: backend
 
       # - name: Run Playwright
