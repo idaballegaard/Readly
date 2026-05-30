@@ -148,7 +148,7 @@ jobs:
           name: frontend
           path: frontend
 
-      - name: Install backend dependencies
+      - name: Install frontend dependencies
         run: npm install
         working-directory: frontend
 
