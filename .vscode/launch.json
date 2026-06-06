@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend API",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run start-dev",
+      "cwd": "${workspaceFolder}/backend"
+    },
+    {
+      "name": "Frontend Vite",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev -- --host 127.0.0.1 --port 5173",
+      "cwd": "${workspaceFolder}/frontend"
+    },
+    {
+      "name": "Frontend Browser",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:5173",
+      "webRoot": "${workspaceFolder}/frontend"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Fullstack (servers)",
+      "configurations": ["Backend API", "Frontend Vite"],
+      "stopAll": true
+    }
+  ]
+}
